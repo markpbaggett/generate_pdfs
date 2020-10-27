@@ -1,8 +1,8 @@
-import osproc, strformat, os, strutils, nimoji, random
+import osproc, strformat, os, strutils, nimoji, random, argparse
 
 proc get_a_book_emoji(): string =
   let 
-    books = [":book:", ":notebook:", ":blue_book:", ":orange_book:", ":green_book:", ":closed_book:"]
+    books = [":notebook_with_decorative_cover:", ":notebook:", ":blue_book:", ":orange_book:", ":green_book:", ":closed_book:"]
   sample(books)
 
 proc get_directory(directory: string): seq[string] =
@@ -19,4 +19,14 @@ proc generate_pdf(directories: seq[string], quality, output_directory: string): 
     discard execShellCmd(my_command)
 
 when isMainModule:
-  discard generate_pdf(get_directory("/home/mark/nim_projects/generate_pdfs/sample_data/"), "80", "test")
+  var
+    p = newParser(fmt"Harvest  OAI Records"):
+      option("-d", "--directory", help="The directory you want to get your books from.")
+      option("-q", "--quality", help="Specify the quality of your output PDF.", default="70")
+      option("-o", "--output", help="Specify your output directory.")
+    argv = commandLineParams()
+    opts = p.parse(argv)
+  if opts.directory != "" and opts.output != "":
+    discard generate_pdf(get_directory(opts.directory), opts.quality, opts.output)
+  else:
+    echo "Must supply an input directory and an output directory."
