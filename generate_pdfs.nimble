@@ -12,3 +12,5 @@ bin           = @["generate_pdfs"]
 # Dependencies
 
 requires "nim >= 1.0.6"
+requires "nimoji >= 0.1.4"
+requires "argparse >= 0.10.0"
