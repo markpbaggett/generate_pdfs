@@ -29,5 +29,3 @@ jobs:
       run: |
         nimble refresh
         nimble install -y
-    - name: Run tests
-      run: nimble test
